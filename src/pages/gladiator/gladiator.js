@@ -1,4 +1,5 @@
 const $ = require('jquery');
+const appRoot = $('#app');
 
 function randInt(low_damage, high_damage) {
     return low_damage + Math.floor(Math.random() * (high_damage - low_damage));
@@ -33,21 +34,27 @@ function Gladiator(name, health, rage, low_damage, high_damage) {
         }
         return false;
     };
-    this.view = function view() {
-        return '<div><button id="attack">Attack</button>&nbsp;&nbsp;<div><button id="heal">Heal</button>';
+}
+
+function view() {
+    $('<h1>Gladiator</h1>');
+    draw();
+}
+
+function attachHandlers() {
+    $('#attack').click(function() {
+        this.attack;
         draw();
-    };
-    this.attachHandlers = function attachHandlers() {
-        $('#attack').click(function() {
-            this.attack;
-            draw();
-        });
-        $('heal').click(function() {
-            this.heal;
-            draw();
-        });
-    };
-    this;
+    });
+    $('heal').click(function() {
+        this.heal;
+        draw();
+    });
+}
+
+function draw() {
+    appRoot.html(view());
+    attachHandlers();
 }
 
 function main() {
