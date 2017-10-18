@@ -6,38 +6,84 @@ function randInt(low_damage, high_damage) {
 }
 
 function Gladiator(name, health, rage, low_damage, high_damage) {
-    this.name = name;
-    this.health = health;
-    this.rage = rage;
-    this.low_damage = low_damage;
-    this.high_damage = high_damage;
-    this.attack = function attack(defender) {
-        const d = randInt(this.low_damage, this.high_damage);
-        const randomNumber = randInt(1, 100);
-        if (this.rage > randomNumber) {
-            defender.health -= d * 2;
-            this.rage = 0;
-        } else {
-            defender.health -= d;
-            this.rage += 15;
-        }
-    };
-    this.heal = function heal(attacker) {
-        if (this.rage >= 10) {
-            this.rage = max(this.rage - 10, 0);
-            this.health = min(this.health + 5, 100);
-        }
-    };
-    this.isDead = function isDead(attacker) {
-        if (this.health <= 0) {
-            return true;
-        }
-        return false;
+    return {
+        name: name,
+        health: health,
+        rage: rage,
+        low_damage: low_damage,
+        high_damage: high_damage
     };
 }
 
+const STATE = {
+    gladiator_1: Gladiator(
+        $('#glad-1-input').val(),
+        150,
+        0,
+        randInt(0, 15),
+        randInt(15, 25)
+    ),
+    gladiator_2: Gladiator(
+        $('#glad-2-input').val(),
+        150,
+        0,
+        randInt(0, 15),
+        randInt(15, 25)
+    ),
+    turn: 1
+};
+
+//punch function
+function punch(attacker, defender) {
+    const d = randInt(attacker.low_damage, attacker.high_damage);
+    const randomNumber = randInt(1, 100);
+    if (randInt(1, 100) <= attacker.rage) {
+        defender.health -= d * 2;
+        attacker.rage = 0;
+    } else {
+        defender.health -= d;
+        attacker.rage += 15;
+    }
+}
+
+//sacraficial stare
+function sacraficialStare(attacker, defender) {
+    attacker.health -= 25;
+    defender.health -= 30;
+}
+
+//super kick
+function mega_kick(attacker, defender) {
+    attacker.rage == 0;
+    defender.health -= 50;
+}
+
+//Heal function
+function heal(gladiator) {
+    if (gladiator.rage >= 10) {
+        gladiator.rage = max(gladiator.rage - 10, 0);
+        gladiator.health = min(gladiator.health + 5, 100);
+    }
+}
+
+//gladiator is dead function
+function isDead(gladiator) {
+    if (gladiator.health <= 0) {
+        return true;
+    }
+    return false;
+}
+
+//skip turn function
+function skip_turn(gladiator) {
+    gladiator.rage += 30;
+}
+
 function view() {
-    $('<h1>Gladiator</h1>');
+    return [
+        '<button id="attack">Attack</button>',
+        '<button id="heal">Heal</button>'
+    ];
     draw();
 }
 
