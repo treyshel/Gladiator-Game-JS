@@ -66,6 +66,16 @@ function heal(gladiator) {
     }
 }
 
+//skip turn function
+function skip_turn(gladiator) {
+    gladiator.rage += 30;
+}
+
+//transform function
+function transform(gladiator) {
+    (gladiator.high_damage && gladiator.low_damage) + 25;
+}
+
 //gladiator is dead function
 function isDead(gladiator) {
     if (gladiator.health <= 0) {
@@ -74,26 +84,67 @@ function isDead(gladiator) {
     return false;
 }
 
-//skip turn function
-function skip_turn(gladiator) {
-    gladiator.rage += 30;
+//show gladiator helper
+function setupGladiator(gladiator) {
+    return (
+        'Gladiator' +
+        gladiator.name +
+        '==>' +
+        '|/' +
+        gladiator.rage +
+        'Rage' +
+        '|/' +
+        gladiator.low_damage +
+        'Low Damage' +
+        '|/' +
+        gladiator.high_damage +
+        'High Damage' +
+        '|/'
+    );
 }
+
+//show gladiator
+function showGladiator() {}
 
 function view() {
     return [
-        '<button id="attack">Attack</button>',
-        '<button id="heal">Heal</button>'
+        '<center><h1>Gladiator Battle</h1><center>',
+        '<input maxlength="20" style="font-size: 20px;width: 250px;height: 30px" type="text" placeholder="Gladiator 1 Name"><br><br>',
+        '<input maxlength="20" style="font-size: 20px;width: 250px;height: 30px" type="text" placeholder="Gladiator 2 Name"><br><br>',
+        '<button id="fight" style="font-size:18px;height:40px;width:80px">FIGHT</button>',
+        '<button id="punch" style="font-size:18px;height:50px;width:100px">Punch</button>&nbsp;&nbsp;',
+        '<button id="heal" style="font-size:18px;height:50px;width:100px">Heal</button>&nbsp;&nbsp;',
+        '<button id="stare" style="font-size:18px;height:50px;width:100px">Stare</button><br><br>',
+        '<button id="kick" style="font-size:18px;height:50px;width:100px">Kick</button>&nbsp;&nbsp;',
+        '<button id="skip" style="font-size:18px;height:50px;width:100px">Skip</button>&nbsp;&nbsp;',
+        '<button id="transform" style="font-size:18px;height:50px;width:100px">Transform</button>&nbsp;&nbsp;'
     ];
     draw();
 }
 
 function attachHandlers() {
-    $('#attack').click(function() {
-        this.attack;
+    $('#punch').click(function() {
+        this.punch;
         draw();
     });
     $('heal').click(function() {
         this.heal;
+        draw();
+    });
+    $('stare').click(function() {
+        this.stare;
+        draw();
+    });
+    $('kick').click(function() {
+        this.kick;
+        draw();
+    });
+    $('skip').click(function() {
+        this.skip;
+        draw();
+    });
+    $('transform').click(function() {
+        this.transform;
         draw();
     });
 }
