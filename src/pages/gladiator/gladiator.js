@@ -87,39 +87,51 @@ function isDead(gladiator) {
 //show gladiator helper
 function setupGladiator(gladiator) {
     return (
-        'Gladiator' +
+        '-|-' +
+        'Gladiator ' +
         gladiator.name +
-        '==>' +
-        '|/' +
+        '-|-' +
+        '-|-' +
+        gladiator.health +
+        ' Health' +
+        '-|-' +
         gladiator.rage +
-        'Rage' +
-        '|/' +
+        ' Rage' +
+        '-|-' +
         gladiator.low_damage +
-        'Low Damage' +
-        '|/' +
+        ' Low Damage' +
+        '-|-' +
         gladiator.high_damage +
-        'High Damage' +
-        '|/'
+        ' High Damage' +
+        '-|-'
     );
 }
 
-//show gladiator
-function showGladiator() {}
+//show gladiator 1 && 2
+function showGladiator1(gladiator) {
+    var glad = setupGladiator(gladiator);
+    $('#glad_1').html(glad);
+}
+
+function showGladiator2(gladiator) {
+    var glad = setupGladiator(gladiator);
+    $('#glad_2').html(glad);
+}
 
 function view() {
     return [
-        '<center><h1>Gladiator Battle</h1><center>',
-        '<input maxlength="20" style="font-size: 20px;width: 250px;height: 30px" type="text" placeholder="Gladiator 1 Name"><br><br>',
-        '<input maxlength="20" style="font-size: 20px;width: 250px;height: 30px" type="text" placeholder="Gladiator 2 Name"><br><br>',
-        '<button id="fight" style="font-size:18px;height:40px;width:80px">FIGHT</button>',
-        '<button id="punch" style="font-size:18px;height:50px;width:100px">Punch</button>&nbsp;&nbsp;',
+        '<br><br><button id="punch" style="font-size:18px;height:50px;width:100px">Punch</button>&nbsp;&nbsp;',
         '<button id="heal" style="font-size:18px;height:50px;width:100px">Heal</button>&nbsp;&nbsp;',
         '<button id="stare" style="font-size:18px;height:50px;width:100px">Stare</button><br><br>',
         '<button id="kick" style="font-size:18px;height:50px;width:100px">Kick</button>&nbsp;&nbsp;',
         '<button id="skip" style="font-size:18px;height:50px;width:100px">Skip</button>&nbsp;&nbsp;',
-        '<button id="transform" style="font-size:18px;height:50px;width:100px">Transform</button>&nbsp;&nbsp;'
+        '<button id="transform" style="font-size:18px;height:50px;width:100px">Transform</button>&nbsp;&nbsp;<br><br>'
     ];
     draw();
+}
+
+function showView() {
+    appRoot.html(view());
 }
 
 function attachHandlers() {
@@ -155,7 +167,13 @@ function draw() {
 }
 
 function main() {
-    draw();
+    $('#fight').click(function() {
+        STATE.gladiator_1.name = $('#glad1input').val();
+        STATE.gladiator_2.name = $('#glad2input').val();
+        showGladiator1(STATE.gladiator_1);
+        showGladiator2(STATE.gladiator_2);
+        draw();
+    });
 }
 
 $(main);
