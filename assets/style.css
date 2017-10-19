@@ -1,0 +1,49 @@
+body {
+    background-image: url(./photos/gladiator_pic.jpg);
+}
+
+.container {
+    margin-top: 5%;
+}
+
+.panel-heading {
+    color: beige;
+    background-color: crimson;
+}
+
+.panel-body {
+    color: crimson;
+    background-color: beige;
+}
+
+button,
+#fight {
+    font-size: 18px;
+    color: beige;
+    height: 40px;
+    width: 80px;
+    background-color: crimson;
+    border: none;
+}
+
+input {
+    font-size: 20px;
+    width: 400px;
+    height: 50px;
+}
+
+#glad_1,
+#glad_2 {
+    font-size: 18px;
+}
+
+#heal,
+#punch,
+#stare,
+#kick,
+#skip,
+#transform {
+    font-size: 18px;
+    height: 50px;
+    width: 100px;
+}

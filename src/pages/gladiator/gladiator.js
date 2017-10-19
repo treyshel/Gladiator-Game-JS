@@ -33,6 +33,29 @@ const STATE = {
     turn: 1
 };
 
+function gladiatorTurn() {
+    if (STATE.turn === 1) {
+        return STATE.gladiator_1;
+    } else {
+        return STATE.gladiator_2;
+    }
+}
+
+function oppositeOponent() {
+    if (STATE.turn === 1) {
+        return STATE.gladiator_2;
+    } else {
+        return STATE.gladiator_1;
+    }
+}
+
+function oppositeOponentTurn() {
+    if (STATE.turn === 1) {
+        STATE.turn = 2;
+    } else {
+        STATE.turn = 1;
+    }
+}
 //punch function
 function punch(attacker, defender) {
     const d = randInt(attacker.low_damage, attacker.high_damage);
@@ -49,20 +72,23 @@ function punch(attacker, defender) {
 //sacraficial stare
 function sacraficialStare(attacker, defender) {
     attacker.health -= 25;
+    attacker.rage += 5;
     defender.health -= 30;
 }
 
 //super kick
 function mega_kick(attacker, defender) {
-    attacker.rage == 0;
-    defender.health -= 50;
+    if (attacker.rage >= 50) {
+        attacker.rage == 0;
+        defender.health -= 50;
+    }
 }
 
 //Heal function
 function heal(gladiator) {
     if (gladiator.rage >= 10) {
-        gladiator.rage = max(gladiator.rage - 10, 0);
-        gladiator.health = min(gladiator.health + 5, 100);
+        gladiator.rage = Math.max(gladiator.rage - 10, 0);
+        gladiator.health = Math.min(gladiator.health + 5, 100);
     }
 }
 
@@ -73,12 +99,15 @@ function skip_turn(gladiator) {
 
 //transform function
 function transform(gladiator) {
-    (gladiator.high_damage && gladiator.low_damage) + 25;
+    if (gladiator.rage >= 100) {
+        (gladiator.high_damage && gladiator.low_damage) + 25;
+    }
 }
 
 //gladiator is dead function
 function isDead(gladiator) {
     if (gladiator.health <= 0) {
+        gladiator.health = Math.max(0);
         return true;
     }
     return false;
@@ -87,23 +116,22 @@ function isDead(gladiator) {
 //show gladiator helper
 function setupGladiator(gladiator) {
     return (
-        '-|-' +
+        '|-|-|' +
         'Gladiator ' +
         gladiator.name +
-        '-|-' +
-        '-|-' +
+        '|-|-|' +
         gladiator.health +
         ' Health' +
-        '-|-' +
+        '|-|-|' +
         gladiator.rage +
         ' Rage' +
-        '-|-' +
+        '|-|-|' +
         gladiator.low_damage +
         ' Low Damage' +
-        '-|-' +
+        '|-|-|' +
         gladiator.high_damage +
         ' High Damage' +
-        '-|-'
+        '|-|-|'
     );
 }
 
@@ -120,12 +148,12 @@ function showGladiator2(gladiator) {
 
 function view() {
     return [
-        '<br><br><button id="punch" style="font-size:18px;height:50px;width:100px">Punch</button>&nbsp;&nbsp;',
-        '<button id="heal" style="font-size:18px;height:50px;width:100px">Heal</button>&nbsp;&nbsp;',
-        '<button id="stare" style="font-size:18px;height:50px;width:100px">Stare</button><br><br>',
-        '<button id="kick" style="font-size:18px;height:50px;width:100px">Kick</button>&nbsp;&nbsp;',
-        '<button id="skip" style="font-size:18px;height:50px;width:100px">Skip</button>&nbsp;&nbsp;',
-        '<button id="transform" style="font-size:18px;height:50px;width:100px">Transform</button>&nbsp;&nbsp;<br><br>'
+        '<br><br><button id="punch">Punch</button>&nbsp;&nbsp;',
+        '<button id="heal">Heal</button>&nbsp;&nbsp;',
+        '<button id="stare">Stare</button><br><br>',
+        '<button id="kick">Kick</button>&nbsp;&nbsp;',
+        '<button id="skip">Skip</button>&nbsp;&nbsp;',
+        '<button id="transform">Transform</button>&nbsp;&nbsp;<br><br>'
     ];
     draw();
 }
@@ -136,33 +164,41 @@ function showView() {
 
 function attachHandlers() {
     $('#punch').click(function() {
-        this.punch;
+        punch(gladiatorTurn(), oppositeOponent());
+        oppositeOponentTurn();
         draw();
     });
-    $('heal').click(function() {
-        this.heal;
+    $('#heal').click(function() {
+        heal(gladiatorTurn());
+        oppositeOponentTurn();
         draw();
     });
-    $('stare').click(function() {
-        this.stare;
+    $('#stare').click(function() {
+        sacraficialStare(gladiatorTurn(), oppositeOponent());
+        oppositeOponentTurn();
         draw();
     });
-    $('kick').click(function() {
-        this.kick;
+    $('#kick').click(function() {
+        mega_kick(gladiatorTurn(), oppositeOponent());
+        oppositeOponentTurn();
         draw();
     });
-    $('skip').click(function() {
-        this.skip;
+    $('#skip').click(function() {
+        skip_turn(gladiatorTurn());
+        oppositeOponentTurn();
         draw();
     });
-    $('transform').click(function() {
-        this.transform;
+    $('#transform').click(function() {
+        transform(gladiatorTurn());
+        oppositeOponentTurn();
         draw();
     });
 }
 
 function draw() {
     appRoot.html(view());
+    showGladiator1(STATE.gladiator_1);
+    showGladiator2(STATE.gladiator_2);
     attachHandlers();
 }
 
@@ -170,8 +206,6 @@ function main() {
     $('#fight').click(function() {
         STATE.gladiator_1.name = $('#glad1input').val();
         STATE.gladiator_2.name = $('#glad2input').val();
-        showGladiator1(STATE.gladiator_1);
-        showGladiator2(STATE.gladiator_2);
         draw();
     });
 }
