@@ -6,7 +6,11 @@ body {
     margin-top: 5%;
 }
 
-.panel-heading {
+.panel-default {
+    border-color: crimson;
+}
+
+.panel-default > .panel-heading {
     color: beige;
     background-color: crimson;
 }
@@ -34,7 +38,7 @@ input {
 
 #glad_1,
 #glad_2 {
-    font-size: 18px;
+    font-size: 25px;
 }
 
 #heal,
@@ -42,7 +46,8 @@ input {
 #stare,
 #kick,
 #skip,
-#transform {
+#transform,
+#restart {
     font-size: 18px;
     height: 50px;
     width: 100px;
