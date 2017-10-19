@@ -88,7 +88,7 @@ function mega_kick(attacker, defender) {
 function heal(gladiator) {
     if (gladiator.rage >= 10) {
         gladiator.rage = Math.max(gladiator.rage - 10, 0);
-        gladiator.health = Math.min(gladiator.health + 5, 100);
+        gladiator.health = Math.min(gladiator.health + 5, 150);
     }
 }
 
@@ -105,12 +105,24 @@ function transform(gladiator) {
 }
 
 //gladiator is dead function
-function isDead(gladiator) {
+function isDead(gladiator, other) {
     if (gladiator.health <= 0) {
         gladiator.health = Math.max(0);
-        return true;
+        showWinner(other.name);
+        disableButtons();
     }
-    return false;
+}
+
+function presentWinner(gladiator) {
+    return [
+        '<h1>||| Winner: Gladiator ' + gladiator + '|||</h1>',
+        '<button id="restart" onclick="document.location.reload()">RESTART</button>'
+    ];
+}
+
+function showWinner(gladiator) {
+    var winner = presentWinner(gladiator);
+    $('#winner').html(winner);
 }
 
 //show gladiator helper
@@ -148,14 +160,24 @@ function showGladiator2(gladiator) {
 
 function view() {
     return [
+        '<h2>Gladiator turn: ' + gladiatorTurn().name + '</h2>',
         '<br><br><button id="punch">Punch</button>&nbsp;&nbsp;',
         '<button id="heal">Heal</button>&nbsp;&nbsp;',
         '<button id="stare">Stare</button><br><br>',
         '<button id="kick">Kick</button>&nbsp;&nbsp;',
         '<button id="skip">Skip</button>&nbsp;&nbsp;',
-        '<button id="transform">Transform</button>&nbsp;&nbsp;<br><br>'
+        '<button id="transform">Transform</button>&nbsp;&nbsp;'
     ];
     draw();
+}
+
+function disableButtons() {
+    $('#punch').prop(disabled, true);
+    $('#heal').prop(disabled, true);
+    $('#stare').prop(disabled, true);
+    $('#kick').prop(disabled, true);
+    $('#skip').prop(disabled, true);
+    $('#transform').prop(disabled, true);
 }
 
 function showView() {
@@ -165,31 +187,37 @@ function showView() {
 function attachHandlers() {
     $('#punch').click(function() {
         punch(gladiatorTurn(), oppositeOponent());
+        isDead(oppositeOponent(), gladiatorTurn());
         oppositeOponentTurn();
         draw();
     });
     $('#heal').click(function() {
         heal(gladiatorTurn());
+        isDead(oppositeOponent(), gladiatorTurn());
         oppositeOponentTurn();
         draw();
     });
     $('#stare').click(function() {
         sacraficialStare(gladiatorTurn(), oppositeOponent());
+        isDead(oppositeOponent(), gladiatorTurn());
         oppositeOponentTurn();
         draw();
     });
     $('#kick').click(function() {
         mega_kick(gladiatorTurn(), oppositeOponent());
+        isDead(oppositeOponent(), gladiatorTurn());
         oppositeOponentTurn();
         draw();
     });
     $('#skip').click(function() {
         skip_turn(gladiatorTurn());
+        isDead(oppositeOponent(), gladiatorTurn());
         oppositeOponentTurn();
         draw();
     });
     $('#transform').click(function() {
         transform(gladiatorTurn());
+        isDead(oppositeOponent(), gladiatorTurn());
         oppositeOponentTurn();
         draw();
     });
