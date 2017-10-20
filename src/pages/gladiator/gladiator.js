@@ -71,9 +71,12 @@ function punch(attacker, defender) {
 
 //sacraficial stare
 function sacraficialStare(attacker, defender) {
-    attacker.health -= 25;
-    attacker.rage += 5;
-    defender.health -= 30;
+    if ((attacker.health -= 25)) {
+        attacker.rage += 5;
+        defender.health -= 30;
+    } else {
+        $('#stare').prop(disabled, true);
+    }
 }
 
 //super kick
@@ -81,6 +84,8 @@ function mega_kick(attacker, defender) {
     if (attacker.rage >= 50) {
         attacker.rage == 0;
         defender.health -= 50;
+    } else {
+        $('#kick').prop(disabled, true);
     }
 }
 
@@ -89,6 +94,8 @@ function heal(gladiator) {
     if (gladiator.rage >= 10) {
         gladiator.rage = Math.max(gladiator.rage - 10, 0);
         gladiator.health = Math.min(gladiator.health + 5, 150);
+    } else {
+        $('#heal').prop(disabled, true);
     }
 }
 
@@ -100,7 +107,11 @@ function skip_turn(gladiator) {
 //transform function
 function transform(gladiator) {
     if (gladiator.rage >= 100) {
-        (gladiator.high_damage && gladiator.low_damage) + 25;
+        gladiator.low_damage += 25;
+        gladiator.high_damage += 25;
+        gladiator.rage -= 100;
+    } else {
+        $('#transform').prop(disabled, true);
     }
 }
 
